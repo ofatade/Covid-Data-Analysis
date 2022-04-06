@@ -33,8 +33,9 @@ object Project2 {
 		var df = raw.filter(raw("Date").gt(lit("1982-01-01"))).filter(raw("Date").lt(lit("2012-12-31")))
 		//add month column
 		df= df.withColumn("Month",month(col("Date")))
-
-		df=df.groupBy("Country","Month").avg("AverageTemperature","AverageTemperatureUncertainty").orderBy("Country","Month")
+		df=df.groupBy("Country","Month")
+			.avg("AverageTemperature","AverageTemperatureUncertainty")
+			.orderBy("Country","Month")
 		var transTime = (System.currentTimeMillis() - startTime) / 1000d
 		df.show(false)
 		println(s"Table length: ${df.count()}")
@@ -56,9 +57,17 @@ object Project2 {
 		println("Dataframe read from CSV:")
 		var startTime = System.currentTimeMillis()
 		var raw = spark.read.format("csv").option("header", "true").option("inferSchema", "true")
-			.load("covid_19_data.csv").withColumn("ObservationDate", to_date(col("ObservationDate"),"MM/dd/yyyy"))
-			.withColumnRenamed("ObservationDate","Date").withColumnRenamed("Country/Region","Country")
-		var df = raw.filter(not(col("Country").like("China"))).withColumn("Country", when(col("Country").contains("China"), "China")otherwise(col("Country")))
+			.load("covid_19_data.csv")
+			.withColumn("ObservationDate", to_date(col("ObservationDate"),"MM/dd/yyyy"))
+			.withColumnRenamed("ObservationDate","Date")
+			.withColumnRenamed("Country/Region","Country")
+		var df = raw.filter(not(col("Country").like("China")))
+			.withColumn("Country", when(col("Country").contains("China"), "China")otherwise(col("Country")))
+		df=df.groupBy(col("Date"),col("Country")).sum("Confirmed","Deaths","Recovered")
+			.orderBy("Country")
+		df=df.withColumnRenamed("sum(Confirmed)", "Confirmed")
+		  .withColumnRenamed("sum(Deaths)","Deaths")
+			.withColumnRenamed("sum(Recovered)","Recovered")
 		val rate_window=Window.partitionBy("Country").orderBy("Country")
 		df = df.withColumn("confirmed_prev_value", lag(col("Confirmed"),1).over(rate_window))
 		df = df.withColumn("DailyConfirmed", when(isnull(col("confirmed") - col("confirmed_prev_value")) ,0)
@@ -69,6 +78,7 @@ object Project2 {
 		df = df.withColumn("recovered_prev_value", lag(col("recovered"),1).over(rate_window))
 		df = df.withColumn("DailyRecovered", when(isnull(col("recovered") - col("recovered_prev_value")) ,0)
 			.otherwise(col("recovered") - col("recovered_prev_value")))
+		df.show()
 		//add month column
 		df= df.withColumn("Month",month(col("Date")))
 		df=df.groupBy(col("Country"),col("Month")).avg("DailyConfirmed","DailyDeaths","DailyRecovered")
@@ -102,7 +112,8 @@ object Project2 {
 			.load("AvgDailyConfirmedDeathsRecovered.csv")
 		val temps = spark.read.format("csv").option("header", "true").option("inferSchema", "true")
 			.load("30yrAvgTempByCountryByMonth.csv")
-		var joined = covid.join(temps, usingColumns = Seq("Country", "Month")).where((covid("Country") === temps("Country")) and ((covid("Month") === temps("Month"))))
+		var joined = covid.join(temps, usingColumns = Seq("Country", "Month"))
+			.where((covid("Country") === temps("Country")) and ((covid("Month") === temps("Month"))))
 		joined.show()
 		// Write the data out as a file to be used for visualization
 		var transTime = (System.currentTimeMillis() - startTime) / 1000d
