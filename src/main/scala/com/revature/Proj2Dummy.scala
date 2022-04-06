@@ -1,109 +1,117 @@
 package com.revature
 
-import org.apache.spark.sql.functions.col
-import org.apache.log4j.{ Level, Logger }
-import org.apache.spark.sql.{ SparkSession, SaveMode, Row, DataFrame }
+import org.apache.spark.sql.functions.{col, isnull, lag, lit, month, not, to_date, when}
+import org.apache.log4j.{Level, Logger}
+import org.apache.spark.sql.{DataFrame, Row, SaveMode, SparkSession}
 import org.apache.spark.sql.types._
 import org.apache.commons.io.FileUtils
+import org.apache.spark.sql.catalyst.dsl.expressions.StringToAttributeConversionHelper
+import org.apache.spark.sql.catalyst.expressions.Month
+import org.apache.spark.sql.expressions.Window
+
+import java.text.SimpleDateFormat
 import java.io.File
 import util.Try
 
 object Project2 {
 	var spark:SparkSession = null
 
-	/**
-	  * Gets a list of filenames in the given directory, filtered by optional matching file extensions.
-	  *
-	  * @param dir			Directory to search.
-	  * @param extensions	Optional list of file extensions to find.
-	  * @return				List of filenames with paths.
-	  */
-	def getListOfFiles(dir: File, extensions: List[String]): List[File] = {
-    	dir.listFiles.filter(_.isFile).toList.filter { file => extensions.exists(file.getName.endsWith(_)) }
-	}
+	def date_format(value: Any, str: String) = ???
 
 	/**
-	  * Moves/renames a file.
-	  *
-	  * @param oldName	Old filename and path.
-	  * @param newName	New filename.
-	  * @return			Success or failure.
+	  * Creates a .csv file entitled '30yrAvgTempByCountryByMonth.csv', that contains historical average (1982-2012) temperature of country by month
 	  */
-	def mv(oldName: String, newName: String) = {
-		Try(new File(oldName).renameTo(new File(newName))).getOrElse(false)
-	}
-
-	def saveDataFrameAsCSV(df: DataFrame, filename: String): String = {
-		df.coalesce(1).write.options(Map("header"->"true", "delimiter"->",")).mode(SaveMode.Overwrite).format("csv").save("tempCSVDir")
-		val curDir = System.getProperty("user.dir")
-		val srcDir = new File(curDir + "/tempCSVDir")
-		val files = getListOfFiles(srcDir, List("csv"))
-		var srcFilename = files(0).toString()
-		val destFilename = curDir + "/" + filename
-		FileUtils.deleteQuietly(new File(destFilename))  // Clear out potential old copies
-		mv(srcFilename, destFilename)  // Move and rename file
-		FileUtils.deleteQuietly(srcDir)  // Delete temp directory
-		destFilename
-	}
-
-		/**
-	  * This is a "dummy" query which you can use as example code.
-	  */
-	private def getUniqueCountries (): Unit = {
+	private def createHistoricalTemperatureAverageByCountryByMonth(): Unit = {
 		// Read "covid_19_data.csv" data as a dataframe
 		println("Dataframe read from CSV:")
 		var startTime = System.currentTimeMillis()
-		var df = spark.read.format("csv").option("header", "true").option("inferSchema", "true").load("GlobalLandTemperaturesByCountry.csv")
+		var raw = spark.read.format("csv").option("header", "true").option("inferSchema", "true")
+			.load("GlobalLandTemperaturesByCountry.csv").withColumn("dt", to_date(col("dt")))
+			.withColumnRenamed("dt","Date")
+		//drop all rows containing any null value
+		raw = raw.na.drop()
+		var df = raw.filter(raw("Date").gt(lit("1982-01-01"))).filter(raw("Date").lt(lit("2012-12-31")))
+		//add month column
+		df= df.withColumn("Month",month(col("Date")))
+
+		df=df.groupBy("Country","Month").avg("AverageTemperature","AverageTemperatureUncertainty").orderBy("Country","Month")
 		var transTime = (System.currentTimeMillis() - startTime) / 1000d
 		df.show(false)
 		println(s"Table length: ${df.count()}")
 		println(s"Transaction time: $transTime seconds")
 		df.printSchema()
+		// Write the data out as a file to be used for visualization
+		println("Save Historical Temperature Average by Country by Month as file...")
+		startTime = System.currentTimeMillis()
+		val fname = saveDataFrameAsCSV(df, "30yrAvgTempByCountryByMonth.csv")
+		transTime = (System.currentTimeMillis() - startTime) / 1000d
+		println(s"Saved as: $fname")
+		println(s"Save completed in $transTime seconds.\n")
+	}
+	/**
+		* TODO
+		*/
+	private def calcAvgDailyConfirmedDeathsRecovered(): Unit = {
+		// Read "covid_19_data.csv" data as a dataframe
+		println("Dataframe read from CSV:")
+		var startTime = System.currentTimeMillis()
+		var raw = spark.read.format("csv").option("header", "true").option("inferSchema", "true")
+			.load("covid_19_data.csv").withColumn("ObservationDate", to_date(col("ObservationDate"),"MM/dd/yyyy"))
+			.withColumnRenamed("ObservationDate","Date").withColumnRenamed("Country/Region","Country")
+		var df = raw.filter(not(col("Country").like("China"))).withColumn("Country", when(col("Country").contains("China"), "China")otherwise(col("Country")))
+		val rate_window=Window.partitionBy("Country").orderBy("Country")
+		df = df.withColumn("confirmed_prev_value", lag(col("Confirmed"),1).over(rate_window))
+		df = df.withColumn("DailyConfirmed", when(isnull(col("confirmed") - col("confirmed_prev_value")) ,0)
+			.otherwise(col("confirmed") - col("confirmed_prev_value")))
+		df = df.withColumn("deaths_prev_value", lag(col("Deaths"),1).over(rate_window))
+		df = df.withColumn("DailyDeaths", when(isnull(col("Deaths") - col("deaths_prev_value")) ,0)
+			.otherwise(col("deaths") - col("deaths_prev_value")))
+		df = df.withColumn("recovered_prev_value", lag(col("recovered"),1).over(rate_window))
+		df = df.withColumn("DailyRecovered", when(isnull(col("recovered") - col("recovered_prev_value")) ,0)
+			.otherwise(col("recovered") - col("recovered_prev_value")))
+		//add month column
+		df= df.withColumn("Month",month(col("Date")))
+		df=df.groupBy(col("Country"),col("Month")).avg("DailyConfirmed","DailyDeaths","DailyRecovered")
+			.orderBy("Country","Month")
+		df=df.select(col("Country"),
+			col("Month"),
+			col("avg(DailyConfirmed)").alias("AvgDailyConfirmed"),
+			col("avg(DailyDeaths)").alias("AvgDailyDeaths"),
+			col("avg(DailyRecovered)").alias("AvgDailyRecovered"))
+		var transTime = (System.currentTimeMillis() - startTime) / 1000d
+		df.show(false)
+		println(s"Table length: ${df.count()}")
+		println(s"Transaction time: $transTime seconds")
+		df.printSchema()
+		// Write the data out as a file to be used for visualization
+		println("Save Avg_Daily_Confirmed_Deaths_Recovered as file...")
+		startTime = System.currentTimeMillis()
+		val fname = saveDataFrameAsCSV(df, "AvgDailyConfirmedDeathsRecovered.csv")
+		transTime = (System.currentTimeMillis() - startTime) / 1000d
+		println(s"Saved as: $fname")
+		println(s"Save completed in $transTime seconds.\n")
+	}
 
-//		// Modify dataframe to change column names and cast doubles to ints
-//		println("Modified dataframe:")
-//		startTime = System.currentTimeMillis()
-//		var df2 = df.withColumnRenamed("dt", "DateObject")
-//					.withColumnRenamed("Country/Region", "Country")
-//					.withColumn("Confirmed", col("Confirmed").cast("int"))
-//					.withColumn("Deaths", col("Deaths").cast("int"))
-//					.withColumn("Recovered", col("Recovered").cast("int"))
-//		transTime = (System.currentTimeMillis() - startTime) / 1000d
-//		df2.show(false)
-//		println(s"Table length: ${df.count()}")
-//		println(s"Transaction time: $transTime seconds")
-//		df2.printSchema()
-//
-//		// Copy the dataframe data into table "testdftable"
-//		println("Table filled from dataframe:")
-//		startTime = System.currentTimeMillis()
-//		spark.sql("DROP TABLE IF EXISTS testdftable")
-//		df2.createOrReplaceTempView("temptable")  // Copies the dataframe into a view as "temptable"
-//		spark.sql("CREATE TABLE testdftable AS SELECT * FROM temptable")  // Loads the data into the table from the view
-//		spark.catalog.dropTempView("temptable")  // View no longer needed
-//		transTime = (System.currentTimeMillis() - startTime) / 1000d
-//		var tabledat = spark.sql("SELECT * FROM testdftable").orderBy("SNo")
-//		tabledat.show(false)
-//		// tabledat.explain()  // Shows the table's definition
-//		spark.sql("SELECT COUNT(*) FROM testdftable").show()
-//		println(s"Transaction time: $transTime seconds\n")
-//
-//		// Create a table of just "State" and "Country" with unique rows
-//		println("Transformation - Unique locations:")
-//		startTime = System.currentTimeMillis()
-//		df = spark.sql("SELECT * FROM testdftable").groupBy("State", "Country").count().withColumnRenamed("count", "Datapoints").orderBy("Country", "State")
-//		transTime = (System.currentTimeMillis() - startTime) / 1000d
-//		df.show(false)
-//		println(s"Unique locations: ${df.count()}")
-//		println(s"Transaction time: $transTime seconds\n")
-//
-//		// Write the data out as a file to be used for visualization
-//		println("Save unique locations as file...")
-//		startTime = System.currentTimeMillis()
-//		val fname = saveDataFrameAsCSV(df, "uniqueLocations.csv")
-//		transTime = (System.currentTimeMillis() - startTime) / 1000d
-//		println(s"Saved as: $fname")
-//		println(s"Save completed in $transTime seconds.\n")
+	/**
+		* TODO
+		*/
+	def joinAndOutputRatesWithTemperature():Unit = {
+		println("Dataframe(s) read from CSV:")
+		var startTime = System.currentTimeMillis()
+		val covid = spark.read.format("csv").option("header", "true").option("inferSchema", "true")
+			.load("AvgDailyConfirmedDeathsRecovered.csv")
+		val temps = spark.read.format("csv").option("header", "true").option("inferSchema", "true")
+			.load("30yrAvgTempByCountryByMonth.csv")
+		var joined = covid.join(temps, usingColumns = Seq("Country", "Month")).where((covid("Country") === temps("Country")) and ((covid("Month") === temps("Month"))))
+		joined.show()
+		// Write the data out as a file to be used for visualization
+		var transTime = (System.currentTimeMillis() - startTime) / 1000d
+		println(s"Transaction time: $transTime seconds")
+		startTime = System.currentTimeMillis()
+		val fname = saveDataFrameAsCSV(joined, "CovidRates&Temperature_ByCountryByTemperature.csv")
+		transTime = (System.currentTimeMillis() - startTime) / 1000d
+		println(s"Saved as: $fname")
+		println(s"Save completed in $transTime seconds.\n")
 	}
 
 	/**
@@ -128,12 +136,51 @@ object Project2 {
 		// Create the database if needed
 		spark.sql("CREATE DATABASE IF NOT EXISTS proj2")
 		spark.sql("USE proj2")
-
 		// Run the "getUniqueCountries" query
-		getUniqueCountries()
+		createHistoricalTemperatureAverageByCountryByMonth()
+		calcAvgDailyConfirmedDeathsRecovered()
+		joinAndOutputRatesWithTemperature()
 
 		// End Spark session
 		spark.stop()
 		println("Transactions complete.")
 	}
+
+	/**
+		* Gets a list of filenames in the given directory, filtered by optional matching file extensions.
+		*
+		* @param dir			Directory to search.
+		* @param extensions	Optional list of file extensions to find.
+		* @return				List of filenames with paths.
+		*/
+	def getListOfFiles(dir: File, extensions: List[String]): List[File] = {
+		dir.listFiles.filter(_.isFile).toList.filter { file => extensions.exists(file.getName.endsWith(_)) }
+	}
+
+	/**
+		* Moves/renames a file.
+		*
+		* @param oldName	Old filename and path.
+		* @param newName	New filename.
+		* @return			Success or failure.
+		*/
+	def mv(oldName: String, newName: String) = {
+		Try(new File(oldName).renameTo(new File(newName))).getOrElse(false)
+	}
+
+	def saveDataFrameAsCSV(df: DataFrame, filename: String): String = {
+		df.coalesce(1).write.options(Map("header"->"true", "delimiter"->",")).mode(SaveMode.Overwrite).format("csv").save("tempCSVDir")
+		val curDir = System.getProperty("user.dir")
+		val srcDir = new File(curDir + "/tempCSVDir")
+		val files = getListOfFiles(srcDir, List("csv"))
+		var srcFilename = files(0).toString()
+		val destFilename = curDir + "/" + filename
+		FileUtils.deleteQuietly(new File(destFilename))  // Clear out potential old copies
+		mv(srcFilename, destFilename)  // Move and rename file
+		FileUtils.deleteQuietly(srcDir)  // Delete temp directory
+		destFilename
+	}
+
+
+
 }
