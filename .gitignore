@@ -9,4 +9,5 @@ metastore_db/
 spark-warehouse/
 project/
 derby.log
-MangaDexReader.code-workspace
+.vscode/
+.idea/
