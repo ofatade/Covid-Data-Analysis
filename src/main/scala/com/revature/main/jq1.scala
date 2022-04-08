@@ -6,12 +6,12 @@ import org.apache.spark.sql.functions._
 import org.apache.spark.sql.types._
 import scala.collection.mutable.ArrayBuffer
 
-object jq1 {
+object jq1 {  // By @JeffH001 / Jeffrey Hafner
 
 	/**
 	  * Percentage of cases which resulted in deaths in the top 10 largest US counties by month from May 2020 to April 2021 (inclusive; i.e. 5/1/20 to 4/30/21).
 	  */
-	private def getTopCountyRates (): Unit = {
+	def getTopCountyRates (): Unit = {
 		// Note: February had 29 days in 2020, and 28 days in 2021
 		val monthLen = Array(0, 31, 28, 31, 30, 31, 30, 31, 31, 30, 31, 30, 31)
 		val monthName = Array("", "Jan", "Feb", "Mar", "Apr", "May", "Jun", "Jul", "Aug", "Sep", "Oct", "Nov", "Dec")
