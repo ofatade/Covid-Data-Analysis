@@ -1,14 +1,53 @@
 package com.revature.main
 
 import com.revature.main.Project2.{saveDataFrameAsCSV, spark}
+import com.revature.main.tq2.t2020
 import org.apache.spark.sql.DataFrame
 import org.apache.spark.sql.expressions.Window
-import org.apache.spark.sql.functions.{col, isnull, lag, lit, month, not, to_date, when}
+import org.apache.spark.sql.functions.{col, isnull, lag, lit, month, not, regexp_replace, to_date, when}
 
 object bq1 {
     var tempsHistAvg:DataFrame=null
     var covidAvgDaily:DataFrame=null
+    var populationNormalization:DataFrame=null
     var joined:DataFrame=null
+  /**
+    * Creates a .csv file entitled '30yrAvgTempByCountryByMonth.csv', that contains historical average (1982-2012) temperature of country by month
+    */
+  def normalizePopulation(): Unit = {
+    // Read "covid_19_data.csv" data as a dataframe
+    println("Dataframe read from CSV:")
+    var startTime = System.currentTimeMillis()
+    var raw = spark.read.format("csv").option("header", "true").option("inferSchema", "true")
+      .load("population_by_country_2020.csv")
+    var df=raw.select("Country", "Population", "WorldShare")
+      .withColumnRenamed("Country (or dependency)", "Country")
+      .withColumnRenamed("World Share", "WorldShare")
+      .withColumn("WorldShare", regexp_replace(col("WorldShare"),"%",""))
+    df.show
+    //drop all rows containing any null value
+    raw = raw.na.drop()
+    var df = raw.filter(raw("Date").gt(lit("1982-01-01"))).filter(raw("Date").lt(lit("2012-12-31")))
+    //add month column
+    df = df.withColumn("Month", month(col("Date")))
+    df = df.groupBy("Country", "Month")
+      .avg("AverageTemperature", "AverageTemperatureUncertainty")
+      .orderBy("Country", "Month")
+    var transTime = (System.currentTimeMillis() - startTime) / 1000d
+    println(s"Table length: ${df.count()}")
+    println(s"Transaction time: $transTime seconds")
+    df.printSchema()
+    // Write the data out as a file to be used for visualization
+    tempsHistAvg=df
+    println("Save Historical Temperature Average by Country by Month as file...")
+    startTime = System.currentTimeMillis()
+    val fname = saveDataFrameAsCSV(df, "30yrAvg1982-2012TempByCountryByMonth.csv")
+    transTime = (System.currentTimeMillis() - startTime) / 1000d
+    println(s"Saved as: $fname")
+    println(s"Save completed in $transTime seconds.\n")
+  }
+
+
     /**
       * Creates a .csv file entitled '30yrAvgTempByCountryByMonth.csv', that contains historical average (1982-2012) temperature of country by month
       */
@@ -35,7 +74,7 @@ object bq1 {
       tempsHistAvg=df
       println("Save Historical Temperature Average by Country by Month as file...")
       startTime = System.currentTimeMillis()
-      val fname = saveDataFrameAsCSV(df, "30yrAvgTempByCountryByMonth.csv")
+      val fname = saveDataFrameAsCSV(df, "30yrAvg1982-2012TempByCountryByMonth.csv")
       transTime = (System.currentTimeMillis() - startTime) / 1000d
       println(s"Saved as: $fname")
       println(s"Save completed in $transTime seconds.\n")
