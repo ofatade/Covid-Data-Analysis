@@ -4,7 +4,7 @@ import com.revature.main.Project2.{saveDataFrameAsCSV, spark}
 import com.revature.main.tq2.t2020
 import org.apache.spark.sql.DataFrame
 import org.apache.spark.sql.expressions.Window
-import org.apache.spark.sql.functions.{col, isnull, lag, lit, month, not, regexp_replace, to_date, when}
+import org.apache.spark.sql.functions.{col, isnull, lag, lit, month, not, regexp_replace, to_date, when, year}
 
 object bq1 {
     var tempsHistAvg:DataFrame=null
@@ -87,18 +87,21 @@ object bq1 {
       // Read "covid_19_data.csv" data as a dataframe
       println("Dataframe read from CSV:")
       var startTime = System.currentTimeMillis()
-      var raw = spark.read.format("csv").option("header", "true").option("inferSchema", "true")
+      var df = spark.read.format("csv").option("header", "true").option("inferSchema", "true")
         .load("covid_19_data.csv")
         .withColumn("ObservationDate", to_date(col("ObservationDate"), "MM/dd/yyyy"))
         .withColumnRenamed("ObservationDate", "Date")
         .withColumnRenamed("Country/Region", "Country")
-      var df = raw.filter(not(col("Country").like("China")))
+        .withColumn("Month", month(col("Date")))
+        .withColumn("Year", year(col("Date")))
+      df = df.filter(not(col("Country").like("China")))
         .withColumn("Country", when(col("Country").contains("China"), "China") otherwise (col("Country")))
-
-      df.show()
-      df = df.withColumnRenamed("sum(Confirmed)", "Confirmed")
-        .withColumnRenamed("sum(Deaths)", "Deaths")
-        .withColumnRenamed("sum(Recovered)", "Recovered")
+//      df = df.groupBy(col("Country"), col("Year"),col("Month"))
+//        .sum("Cases", "Deaths", "Recovered")
+//        .orderBy("Country", "Month", "Year")
+//      df = df.withColumnRenamed("sum(Confirmed)", "Confirmed")
+//        .withColumnRenamed("sum(Deaths)", "Deaths")
+//        .withColumnRenamed("sum(Recovered)", "Recovered")
       val rate_window = Window.partitionBy("Country").orderBy("Country")
       df = df.withColumn("confirmed_prev_value", lag(col("Confirmed"), 1).over(rate_window))
       df = df.withColumn("DailyConfirmed", when(isnull(col("confirmed") - col("confirmed_prev_value")), 0)
@@ -110,7 +113,6 @@ object bq1 {
       df = df.withColumn("DailyRecovered", when(isnull(col("recovered") - col("recovered_prev_value")), 0)
         .otherwise(col("recovered") - col("recovered_prev_value")))
       //add month column
-      df = df.withColumn("Month", month(col("Date")))
       df = df.groupBy(col("Country"), col("Month"))
         .avg("DailyConfirmed", "DailyDeaths", "DailyRecovered")
         .orderBy("Country", "Month")
