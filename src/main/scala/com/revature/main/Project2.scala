@@ -37,9 +37,13 @@ object Project2 {
 		spark.sql("CREATE DATABASE IF NOT EXISTS proj2")
 		spark.sql("USE proj2")
 		// Run the "getUniqueCountries" query
-		//bq1.createHistoricalTemperatureAverageByCountryByMonth()
+
+		bq1.normalizePopulation()
+		bq1.createHistoricalTemperatureAverageByCountryByMonth()
 		bq1.calcAvgDailyConfirmedDeathsRecovered()
-		//bq1.joinAndOutputRatesWithTemperature()
+		bq1.joinAndOutputRatesWithTemperature()
+    dq2.countryCasesVsDeath()
+
 		// End Spark session
 		spark.stop()
 		println("Transactions complete.")
