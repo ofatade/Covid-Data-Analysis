@@ -50,7 +50,7 @@ This was a group project where we were given COVID-19 data which covered the per
 
 This query looked at the ten largest counties in the US and showed deaths per confirmed case of COVID-19 for each month from May '20 to April '21.
 
-<div align="center"><a href="/images/JQ1.png"><img alt="Graph of data" src="/images/JQ1.png?raw=true" height=300></a>
+<div align="center"><a href="/images/JQ1.png?raw=true"><img alt="Graph of data" src="/images/JQ1.png?raw=true" height=300></a>
 
 (click image for full size view)</div>
 
@@ -60,12 +60,12 @@ This query looked at the ten largest counties in the US and showed deaths per co
 
 This query looked at the 50 US states plus Washington DC and showed the number of deaths per million for each month, plus the average number of deaths per month, for the 12 month period starting from May '20.
 
-<div align="center"><a href="/images/JQ2a.png"><img alt="Full graph of data" src="/images/JQ2a.png?raw=true" height=300></a>
+<div align="center"><a href="/images/JQ2a.png?raw=true"><img alt="Full graph of data" src="/images/JQ2a.png?raw=true" height=300></a>
 
 Full graph of data
 (click image for full size view)</div>
 
-<div align="center"><a href="/images/JQ2b.png"><img alt="Graph of just the averages" src="/images/JQ2b.png?raw=true" height=300></a>
+<div align="center"><a href="/images/JQ2b.png?raw=true"><img alt="Graph of just the averages" src="/images/JQ2b.png?raw=true" height=300></a>
 
 Graph of just the averages
 (click image for full size view)</div>
@@ -74,7 +74,7 @@ Graph of just the averages
 
 **???**
 
-<div align="center"><a href="/images/EQ1.png"><img alt="Graph of data" src="/images/EQ1.png?raw=true" height=300></a>
+<div align="center"><a href="/images/EQ1.png?raw=true"><img alt="Graph of data" src="/images/EQ1.png?raw=true" height=300></a>
 
 (click image for full size view)</div>
 
@@ -82,7 +82,7 @@ Graph of just the averages
 
 **???**
 
-<div align="center"><a href="/images/EQ2.png"><img alt="Graph of data" src="/images/EQ2.png?raw=true" height=300></a>
+<div align="center"><a href="/images/EQ2.png?raw=true"><img alt="Graph of data" src="/images/EQ2.png?raw=true" height=300></a>
 
 (click image for full size view)</div>
 
@@ -92,12 +92,12 @@ Graph of just the averages
 
 This query looked at the ten US states and territories with highest and lowest raw number of deaths due to COVID-19.
 
-<div align="center"><a href="/images/DQ1best.png"><img alt="10 US states and territories with the lowest death totals" src="/images/DQ1best.png?raw=true" height=300></a>
+<div align="center"><a href="/images/DQ1best.png?raw=true"><img alt="10 US states and territories with the lowest death totals" src="/images/DQ1best.png?raw=true" height=300></a>
 
 10 US states and territories with the lowest death totals, along with their populations
 (click image for full size view)</div>
 
-<div align="center"><a href="/images/DQ1worst.png"><img alt="10 US states and territories with the lowest death totals" src="/images/DQ1worst.png?raw=true" height=300></a>
+<div align="center"><a href="/images/DQ1worst.png?raw=true"><img alt="10 US states and territories with the lowest death totals" src="/images/DQ1worst.png?raw=true" height=300></a>
 
 10 US states and territories with the highest death totals, along with their populations
 (click image for full size view)</div>
@@ -108,7 +108,7 @@ This query looked at the ten US states and territories with highest and lowest r
 
 This query looked at the ratio of COVID-19 deaths to the confirmed cases in countries around the world, as of April 2021.
 
-<div align="center"><a href="/images/DQ2.png"><img alt="Graph of data" src="/images/DQ2.png?raw=true" height=300></a>
+<div align="center"><a href="/images/DQ2.png?raw=true"><img alt="Graph of data" src="/images/DQ2.png?raw=true" height=300></a>
 
 (click image for full size view)</div>
 
@@ -118,7 +118,7 @@ This query looked at the ratio of COVID-19 deaths to the confirmed cases in coun
 
 This query pulled in outside data from the CDC on the <a href="https://www.cdc.gov/nchs/fastats/state-and-territorial-data.htm">total number of deaths in 2020 by State</a>, and used that to show what percentage of deaths overall that year were due to COVID-19 for each state.
 
-<div align="center"><a href="/images/TQ1.png"><img alt="Graph of the data" src="/images/TQ1.png?raw=true" height=300></a>
+<div align="center"><a href="/images/TQ1.png?raw=true"><img alt="Graph of the data" src="/images/TQ1.png?raw=true" height=300></a>
 
 (click image for full size view)</div>
 
@@ -126,12 +126,12 @@ This query pulled in outside data from the CDC on the <a href="https://www.cdc.g
 
 This query found the top ten best and worst states based on COVID-19 death rates vs population.
 
-<div align="center"><a href="/images/TQ2best.png"><img alt="Top 10 US states for lowest death rate" src="/images/TQ2best.png?raw=true" height=300></a>
+<div align="center"><a href="/images/TQ2best.png?raw=true"><img alt="Top 10 US states for lowest death rate" src="/images/TQ2best.png?raw=true" height=300></a>
 
 Best 10 US states with the lowest COVID-19 death rates
 (click image for full size view)</div>
 
-<div align="center"><a href="/images/TQ2worst.png"><img alt="Top 10 US states for lowest death rate" src="/images/TQ2worst.png?raw=true" height=300></a>
+<div align="center"><a href="/images/TQ2worst.png?raw=true"><img alt="Top 10 US states for lowest death rate" src="/images/TQ2worst.png?raw=true" height=300></a>
 
 Worst 10 US states with the highest COVID-19 death rates
 (click image for full size view)</div>
