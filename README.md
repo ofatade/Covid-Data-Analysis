@@ -5,16 +5,16 @@
 * <a href="#contributors">Contributors</a>
 * <a href="#made-with">Made With...</a>
 * <a href="#the-queries">The Queries</a>
-  * Brian Vegh's query #1
-  * Brian Vegh's query #2
-  * Jeffrey Hafner's query #1
-  * Jeffrey Hafner's query #2
-  * Eric Thistle's query #1
-  * Eric Thistle's query #2
-  * Dare Fatade's query #1
-  * Dare Fatade's query #2
-  * Md Tahmid Khan's query #1
-  * Md Tahmid Khan's query #2
+  * <a href="bq1---by-brian-vegh">Brian Vegh's query #1</a>
+  * <a href="bq2---by-brian-vegh">Brian Vegh's query #2</a>
+  * <a href="jq1---by-jeffrey-hafner">Jeffrey Hafner's query #1</a>
+  * <a href="jq2---by-jeffrey-hafner">Jeffrey Hafner's query #2</a>
+  * <a href="eq1---by-eric-thistle">Eric Thistle's query #1</a>
+  * <a href="eq2---by-eric-thistle">Eric Thistle's query #2</a>
+  * <a href="dq1---by-dare-fatade">Dare Fatade's query #1</a>
+  * <a href="dq2---by-dare-fatade">Dare Fatade's query #2</a>
+  * <a href="tq1---by-md-tahmid-khan">Md Tahmid Khan's query #1</a>
+  * <a href="tq2---by-md-tahmid-khan">Md Tahmid Khan's query #2</a>
 
 ## Project Description
 
@@ -22,11 +22,11 @@ This was a group project where we were given COVID-19 data which covered the per
 
 ## Contributors
 
-- Brian Vegh @brianvegh
-- Jeffrey Hafner @JeffH001
-- Eric Thistle @erthis
-- Dare Fatade @ofatade
-- Md Tahmid Khan @MdTahmidKhan
+- Brian Vegh [@brianvegh](https://github.com/brianvegh)
+- Jeffrey Hafner [@JeffH001](https://github.com/JeffH001)
+- Eric Thistle [@erthis](https://github.com/erthis)
+- Dare Fatade [@ofatade](https://github.com/ofatade)
+- Md Tahmid Khan [@MdTahmidKhan](https://github.com/MdTahmidKhan)
 
 ## Made With...
 - Scala v2.12.15
@@ -36,15 +36,15 @@ This was a group project where we were given COVID-19 data which covered the per
 - Tableau 2022.1.0
 
 ## The Queries
-### BQ1 - by Brian Vegh @brianvegh
+### BQ1 - by Brian Vegh
 
 **???**
 
-### BQ2 - by Brian Vegh @brianvegh
+### BQ2 - by Brian Vegh
 
 **???**
 
-### JQ1 - by Jeffrey Hafner @JeffH001
+### JQ1 - by Jeffrey Hafner
 
 **Percent of Deaths Per Case for the Top 10 Most Populous US Counties (May '20 – April '21)**
 
@@ -54,7 +54,7 @@ This query looked at the ten largest counties in the US and showed deaths per co
 
 (click image for full size view)</div>
 
-### JQ2 - by Jeffrey Hafner @JeffH001
+### JQ2 - by Jeffrey Hafner
 
 **Average Deaths Per Month Per Million in US States + DC (May '20 – April '21)**
 
@@ -70,15 +70,15 @@ Full graph of data
 Graph of just the averages
 (click image for full size view)</div>
 
-### EQ1 - by Eric Thistle @erthis
+### EQ1 - by Eric Thistle
 
 **???**
 
-### EQ2 - by Eric Thistle @erthis
+### EQ2 - by Eric Thistle
 
 **???**
 
-### DQ1 - by Dare Fatade @ofatade
+### DQ1 - by Dare Fatade
 
 **Most and Least Deaths by COVID-19 in US States and Territories**
 
@@ -94,7 +94,7 @@ This query looked at the ten US states and territories with highest and lowest r
 10 US states and territories with the highest death totals, along with their populations
 (click image for full size view)</div>
 
-### DQ2 - by Dare Fatade @ofatade
+### DQ2 - by Dare Fatade
 
 **COVID-19 Death/Case Ratio by Country as of April '21**
 
@@ -104,7 +104,7 @@ This query looked at the ratio of COVID-19 deaths to the confirmed cases in coun
 
 (click image for full size view)</div>
 
-### TQ1 - by Md Tahmid Khan @MdTahmidKhan
+### TQ1 - by Md Tahmid Khan
 
 **Percent of Total Deaths Due to COVID-19 by US State**
 
@@ -114,7 +114,7 @@ This query pulled in outside data from the CDC on the <a href="https://www.cdc.g
 
 (click image for full size view)</div>
 
-### TQ2 - by Md Tahmid Khan @MdTahmidKhan
+### TQ2 - by Md Tahmid Khan
 
 This query found the top ten best and worst states based on COVID-19 death rates vs population.
 
