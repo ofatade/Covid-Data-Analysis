@@ -48,7 +48,7 @@ This was a group project where we were given COVID-19 data which covered the per
 
 **Percent of Deaths Per Case for the Top 10 Most Populous US Counties (May '20 – April '21)**
 
-This query looked at the ten largest counties in the US and showed deaths per confirmed case of COVID-19 for each month from May '20 to April '21.
+This query looked at the ten most populous counties in the US and showed deaths per confirmed case of COVID-19 for each month from May '20 to April '21.
 
 <div align="center"><a href="/images/JQ1.png?raw=true"><img alt="Graph of data" src="/images/JQ1.png?raw=true" height=300></a>
 
