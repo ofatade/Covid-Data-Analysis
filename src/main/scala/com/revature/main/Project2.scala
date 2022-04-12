@@ -38,8 +38,10 @@ object Project2 {
 		spark.sql("USE proj2")
 		// Run the "getUniqueCountries" query
 		//bq1.createHistoricalTemperatureAverageByCountryByMonth()
-		bq1.calcAvgDailyConfirmedDeathsRecovered()
+		//bq1.calcAvgDailyConfirmedDeathsRecovered()
 		//bq1.joinAndOutputRatesWithTemperature()
+		//dq1.statePopulationVsDeath()
+		dq2.countryCasesVsDeath()
 		// End Spark session
 		spark.stop()
 		println("Transactions complete.")
