@@ -5,16 +5,16 @@
 * <a href="#contributors">Contributors</a>
 * <a href="#made-with">Made With...</a>
 * <a href="#the-queries">The Queries</a>
-  * <a href="bq1---by-brian-vegh">Brian Vegh's query #1</a>
-  * <a href="bq2---by-brian-vegh">Brian Vegh's query #2</a>
-  * <a href="jq1---by-jeffrey-hafner">Jeffrey Hafner's query #1</a>
-  * <a href="jq2---by-jeffrey-hafner">Jeffrey Hafner's query #2</a>
-  * <a href="eq1---by-eric-thistle">Eric Thistle's query #1</a>
-  * <a href="eq2---by-eric-thistle">Eric Thistle's query #2</a>
-  * <a href="dq1---by-dare-fatade">Dare Fatade's query #1</a>
-  * <a href="dq2---by-dare-fatade">Dare Fatade's query #2</a>
-  * <a href="tq1---by-md-tahmid-khan">Md Tahmid Khan's query #1</a>
-  * <a href="tq2---by-md-tahmid-khan">Md Tahmid Khan's query #2</a>
+  * <a href="#bq1---by-brian-vegh">Brian Vegh's query #1</a>
+  * <a href="#bq2---by-brian-vegh">Brian Vegh's query #2</a>
+  * <a href="#jq1---by-jeffrey-hafner">Jeffrey Hafner's query #1</a>
+  * <a href="#jq2---by-jeffrey-hafner">Jeffrey Hafner's query #2</a>
+  * <a href="#eq1---by-eric-thistle">Eric Thistle's query #1</a>
+  * <a href="#eq2---by-eric-thistle">Eric Thistle's query #2</a>
+  * <a href="#dq1---by-dare-fatade">Dare Fatade's query #1</a>
+  * <a href="#dq2---by-dare-fatade">Dare Fatade's query #2</a>
+  * <a href="#tq1---by-md-tahmid-khan">Md Tahmid Khan's query #1</a>
+  * <a href="#tq2---by-md-tahmid-khan">Md Tahmid Khan's query #2</a>
 
 ## Project Description
 
