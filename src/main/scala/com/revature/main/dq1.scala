@@ -40,29 +40,6 @@ object dq1 extends Serializable {
     saveDataFrameAsCSV(descending.limit(10),"topTenStates.csv")
     df.show(false)
 
-    // Start the Spark session
-    System.setProperty("hadoop.home.dir", "C:\\hadoop")  // Assumes this is the location of your Hadoop directory
-    Logger.getLogger("org").setLevel(Level.ERROR)  // Hide most of the initial non-error log messages
-    spark = SparkSession.builder
-      .appName("Proj2")
-      .config("spark.master", "local[*]")
-      .enableHiveSupport()
-      .getOrCreate()
-    spark.sparkContext.setLogLevel("ERROR")  // Hide further non-error messages
-    spark.sql("SET hive.exec.dynamic.partition.mode=nonstrict")
-    println("Created Spark session.\n")
-
-    // Create the database if needed
-    spark.sql("CREATE DATABASE IF NOT EXISTS proj2")
-    spark.sql("USE proj2")
-
-    // Run the "statePopulationVsDeath" query
-    statePopulationVsDeath()
-
-    // End Spark session
-    spark.stop()
-    println("Transactions complete.")
-
   }
 
 }

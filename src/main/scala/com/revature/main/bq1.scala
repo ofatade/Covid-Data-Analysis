@@ -79,6 +79,7 @@ object bq1 {
         .withColumn("ObservationDate", to_date(col("ObservationDate"), "MM/dd/yyyy"))
         .withColumnRenamed("ObservationDate", "Date")
         .withColumnRenamed("Country/Region", "Country")
+
         .withColumn("Year", year(col("Date")))
         .withColumn("Month", month(col("Date")))
       df = df.filter(df("Date").gt(lit("2020-01-31")))
@@ -89,6 +90,7 @@ object bq1 {
         .withColumn("Country", when(col("Country").like("UK"), "United Kingdom") otherwise col("Country"))
         .withColumn("Country", when(col("Country").like("Congo (Kinshasa)"), "Democratic Republic of Congo") otherwise col("Country"))
         .withColumn("Country", when(col("Country").like("Congo (Brazzaville)"), "Congo") otherwise col("Country"))
+
       val rate_window = Window.partitionBy("Country").orderBy("Country")
       df = df.withColumn("confirmed_prev_value", lag(col("Confirmed"), 1).over(rate_window))
       df = df.withColumn("DailyConfirmed", when((col("Confirmed") - col("confirmed_prev_value")<=0), 0)
