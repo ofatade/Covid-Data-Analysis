@@ -1,6 +1,7 @@
 package com.revature.main
 
 import com.revature.main.Project2.{saveDataFrameAsCSV, spark}
+import com.revature.main.bq1.joined
 import org.apache.curator.shaded.com.google.common.collect.Iterators.limit
 import org.apache.spark.sql.DataFrame
 import org.apache.spark.sql.catalyst.dsl.expressions.StringToAttributeConversionHelper
@@ -64,17 +65,13 @@ object dq2 {
     .drop("fraction")
     .orderBy("Country","Year", "Month")
   println("Death and Case Ratio by Month from April 2020 - April 2021")
-
-  //val ascending = df.orderBy("Percent")
-  //saveDataFrameAsCSV(ascending.limit(10),"monthlybestStates.csv")
-  //ascending.show()
-  //Shows Death/Case Ratio percentage Descending
-  val descending =df.orderBy(desc("Percent"))
-  saveDataFrameAsCSV(descending.limit(10),"monthlyworstcountries.csv")
-  descending.show()
-
-
-
+  df.show()
+  //Shows Death/Case Ratio Monthly percentage
+  startTime = System.currentTimeMillis()
+  val monthly = saveDataFrameAsCSV(df, "MonthlyData.csv")
+  val transTime = (System.currentTimeMillis() - startTime) / 1000d
+  println(s"Saved as: $monthly")
+  println(s"Save completed in $transTime seconds.\n")
 
   var df3: DataFrame =df.groupBy("Country")
     .sum("MonthlyNewCases","MonthlyNewDeaths")
@@ -86,20 +83,11 @@ object dq2 {
     .drop("fraction")
     .orderBy("Country")
   println("Death and Case Ratio for a Year (April 2020 - April 2021)")
-
-  val ascending = df.orderBy("Percent")
-  saveDataFrameAsCSV(ascending.limit(10),"yearlybestcountries.csv")
-  ascending.show()
-  //Shows Death percentage Descending
-  val descend =df.orderBy(desc("Percent"))
-  saveDataFrameAsCSV(descend.limit(10),"yearlyworstStates.csv")
-  descend.show()
-   //var yearly = df.orderBy("Percent")
-  //saveDataFrameAsCSV(df.limit(20),"yearlydata.csv")
-  //yearly.show()
-  //df3.show()
-
-  //create table with only last days of months
+  df3.show()
+  startTime = System.currentTimeMillis()
+  val yearly = saveDataFrameAsCSV(df3, "YearlyData.csv")
+  println(s"Saved as: $yearly")
+  println(s"Save completed in $transTime seconds.\n")
 
 
 
