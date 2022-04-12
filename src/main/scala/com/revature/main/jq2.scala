@@ -125,7 +125,7 @@ object jq2 {  // By @JeffH001 / Jeffrey Hafner
 			}
 		}
 
-		// Find the averages
+		// Find the average of the months values for each state + DC
 		var avgit = cols.foldLeft(lit(0)){(x, y) => x + y} / cols.length
 		df1 = df1.withColumn("Average", avgit)
 		df2 = df2.withColumn("Average", avgit)
@@ -142,7 +142,7 @@ object jq2 {  // By @JeffH001 / Jeffrey Hafner
 		println("\nSave data as file...")
 		startTime = System.currentTimeMillis()
 		val fname1 = saveDataFrameAsCSV(df1, "USStateDeathsByMonth.csv")
-		val fname2 = saveDataFrameAsCSV(df1, "USStatePctDeathsByMonth.csv")
+		val fname2 = saveDataFrameAsCSV(df2, "USStatePctDeathsByMonth.csv")
 		transTime = (System.currentTimeMillis() - startTime) / 1000d
 		println(s"Saved number of deaths as: $fname1")
 		println(s"Saved percent of deaths as: $fname2")
