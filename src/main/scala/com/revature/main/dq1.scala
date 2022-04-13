@@ -7,7 +7,7 @@ import org.apache.spark.sql.functions.{col, desc, isnull, month, not, to_date, u
 
 object dq1 extends Serializable {
   /**
-    * Compare state population to number of recovery from April 2020 - April 2021 by Month
+    * Compare state population to number of deaths from April 2020 - April 2021
     */
   def statePopulationVsDeath(): Unit =
   {
