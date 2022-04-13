@@ -88,14 +88,4 @@ object dq2 {
   val yearly = saveDataFrameAsCSV(df3, "YearlyData.csv")
   println(s"Saved as: $yearly")
   println(s"Save completed in $transTime seconds.\n")
-
-
-
-
-
-
-
-
-
-
 }
