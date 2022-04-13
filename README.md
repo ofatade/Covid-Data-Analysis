@@ -5,8 +5,7 @@
 * <a href="#contributors">Contributors</a>
 * <a href="#made-with">Made With...</a>
 * <a href="#the-queries">The Queries</a>
-  * <a href="#bq1---by-brian-vegh">Brian Vegh's query #1</a>
-  * <a href="#bq2---by-brian-vegh">Brian Vegh's query #2</a>
+  * <a href="#bq1-bq2---by-brian-vegh">Brian Vegh's query #1</a>
   * <a href="#jq1---by-jeffrey-hafner">Jeffrey Hafner's query #1</a>
   * <a href="#jq2---by-jeffrey-hafner">Jeffrey Hafner's query #2</a>
   * <a href="#eq1---by-eric-thistle">Eric Thistle's query #1</a>
@@ -36,13 +35,23 @@ This was a group project where we were given COVID-19 data which covered the per
 - Tableau 2022.1.0
 
 ## The Queries
-### BQ1 - by Brian Vegh
+### BQ1 & BQ2 - by Brian Vegh
 
-**???**
+**Relationship between COVID-19 Case Rate and Historical Average Temperature by Country (Feb. '20 - April '21)**
 
-### BQ2 - by Brian Vegh
+The first query found the average number of cases per month per country, normalized by population size.
 
-**???**
+The second query used the data from that first query, plus [historical climate data from the Berkeley Earth data page](https://data.world/data-society/global-climate-change-data) to look at the COVID-19 data for a relationship between average historical temperatures and the rate of COVID-19 cases by country.
+
+<div align="center"><a href="/images/BQ1.png?raw=true"><img alt="Graph of data" src="/images/BQ1.png?raw=true" height=300></a>
+
+Data shown for June 2020 (color represents temperature, circles represent number of cases)
+(click image for full size view)</div>
+
+<div align="center"><a href="/images/BQ2.png?raw=true"><img alt="Graph of data" src="/images/BQ2.png?raw=true" height=300></a>
+
+Data shown for June 2020 (top line is temperature data, population numbers at the bottom)
+(click image for full size view)</div>
 
 ### JQ1 - by Jeffrey Hafner
 
@@ -82,7 +91,9 @@ This query used the COVID-19 data and <a href="https://www.census.gov/data/table
 
 ### EQ2 - by Eric Thistle
 
-**???**
+**Comparison of Number of Overall Deaths in 2019, 2020, and COVID-19 Deaths in 2020 for Texas**
+
+This query compared the overall death rate in Texas between 2019 and 2020, showing that the death rate was significantly higher in 2020, and showing that the rise in overall deaths matched the rise in COVID-19 deaths in 2020.
 
 <div align="center"><a href="/images/EQ2.png?raw=true"><img alt="Graph of data" src="/images/EQ2.png?raw=true" height=300></a>
 
