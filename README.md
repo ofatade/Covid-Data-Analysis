@@ -72,7 +72,9 @@ Graph of just the averages
 
 ### EQ1 - by Eric Thistle
 
-**???**
+**Deaths Per Capita Compared with Population Density of US States**
+
+This query used the COVID-19 data and <a href="https://www.census.gov/data/tables/time-series/dec/density-data-text.html">2020 US census data on population density by state</a> to look for a relationship between the number of deaths per capita and the population density of each state.
 
 <div align="center"><a href="/images/EQ1.png?raw=true"><img alt="Graph of data" src="/images/EQ1.png?raw=true" height=300></a>
 
