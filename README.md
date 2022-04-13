@@ -56,7 +56,7 @@ This query looked at the ten most populous counties in the US and showed deaths 
 
 ### JQ2 - by Jeffrey Hafner
 
-**Average Deaths Per Month Per Million in US States + DC (May '20 – April '21)**
+**Deaths Per Month Per Million in US States + DC (May '20 – April '21)**
 
 This query looked at the 50 US states plus Washington DC and showed the number of deaths per million for each month, plus the average number of deaths per month, for the 12 month period starting from May '20.
 
