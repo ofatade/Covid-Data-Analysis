@@ -5,7 +5,7 @@
 * <a href="#contributors">Contributors</a>
 * <a href="#made-with">Made With...</a>
 * <a href="#the-queries">The Queries</a>
-  * <a href="#bq1-bq2---by-brian-vegh">Brian Vegh's query #1</a>
+  * <a href="#bq1--bq2---by-brian-vegh">Brian Vegh's query #1 & #2</a>
   * <a href="#jq1---by-jeffrey-hafner">Jeffrey Hafner's query #1</a>
   * <a href="#jq2---by-jeffrey-hafner">Jeffrey Hafner's query #2</a>
   * <a href="#eq1---by-eric-thistle">Eric Thistle's query #1</a>
