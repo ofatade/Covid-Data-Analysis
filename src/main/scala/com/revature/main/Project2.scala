@@ -1,6 +1,7 @@
 package com.revature.main
 
 
+<<<<<<< HEAD
 import com.revature.main.Project2.{saveDataFrameAsCSV, spark}
 import org.apache.commons.io.FileUtils
 import org.apache.log4j.{Level, Logger}
@@ -83,7 +84,3 @@ object Project2 {
 		FileUtils.deleteQuietly(srcDir)  // Delete temp directory
 		destFilename
 	}
-
-
-
-}
